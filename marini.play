@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domino Playtime</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f6f1;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin: 20px 0;
+            color: #666;
+            font-size: 2em;
+        }
+
+        #play-area {
+            width: 80%;
+            height: 70%;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: #fff;
+            overflow: auto;
+            position: relative;
+        }
+
+        .plank {
+            width: 60px;
+            height: 20px;
+            margin: 5px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .plank.pink { background-color: #ffccd5; color: #a63a52; }
+        .plank.blue { background-color: #cce5ff; color: #396ab2; }
+        .plank.green { background-color: #d4edda; color: #388e3c; }
+        .plank.yellow { background-color: #fff3cd; color: #a08b3a; }
+    </style>
+</head>
+<body>
+    <h1>Domino Playtime</h1>
+    <button onclick="addPlank()">Add a Plank</button>
+    <div id="play-area"></div>
+
+    <script>
+        const colors = ['pink', 'blue', 'green', 'yellow'];
+        const playArea = document.getElementById('play-area');
+        let plankCount = 0;
+
+        function addPlank() {
+            if (plankCount >= 1000) {
+                alert('Maximum of 1000 planks reached!');
+                return;
+            }
+
+            const plank = document.createElement('div');
+            plank.className = `plank ${colors[plankCount % colors.length]}`;
+            plank.textContent = 'M';
+
+            // Add drag-and-drop functionality
+            plank.draggable = true;
+            plank.ondragstart = (e) => e.dataTransfer.setData('text', e.target.id);
+            plank.id = `plank-${plankCount}`;
+
+            playArea.appendChild(plank);
+            plankCount++;
+        }
+
+        // Drag-and-drop area setup
+        playArea.ondragover = (e) => e.preventDefault();
+        playArea.ondrop = (e) => {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('text');
+            const draggedPlank = document.getElementById(data);
+            e.target.appendChild(draggedPlank);
+        };
+    </script>
+</body>
+</html>
